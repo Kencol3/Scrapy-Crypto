@@ -1,2 +1,4 @@
 # Scrapy-Crypto
-Project to Scrape data from CoinMarketCap and analyze the Crypto Market status, highlighting those which merit in depth research
+My NYDSA project to Scrape data from CoinMarketCap.com and analyze the Crypto Market.
+The scraped data will help us highlight those coins, which will merit in depth research.
+We are essentially scraping a snapshot of the market as it stands the day the spider is launched. (Spider enclosed).
