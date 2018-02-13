@@ -1,0 +1,132 @@
+#terminal
+#cd Desktop
+#scrapy startproject crypto
+	#creates a folder on my desktop
+#https://coinmarketcap.com/
+#https://coinmarketcap.com/currencies/bitcoin/
+#https://coinmarketcap.com/currencies/bitcoin/#markets
+
+#terminal - create spider.py
+#cd crypto
+#cd crypto
+
+#sublime - create new, save file to ./Desktop/crypto/crypto/crypto_spider.py
+
+#last page of crypto is https://coinmarketcap.com/16******
+
+#I want to pull the name, symbol, market cap, current px, volume, circulating supply
+
+
+https://coinmarketcap.com/currencies/bitcoin/#markets
+pull the table of source, pair, volume, price
+
+https://coinmarketcap.com/currencies/bitcoin/historical-data/?start=20130428&end=20180207
+bitcoin historical prices, date, open, high, low, close, volume, market cap
+
+https://coinmarketcap.com/all/views/all/
+Shows the table for the entire list of coins and tokens
+
+https://coinmarketcap.com/coins/views/all/
+Shows the table for the entire list of coins
+
+
+
+
+Full Table XPath
+//*[@id="currencies-all"]
+
+Name & Href is the link to move to the Bitcoin Page
+<a class="currency-name-container" href="/currencies/bitcoin/">Bitcoin</a>
+
+Symbol
+<td class="text-left col-symbol">BTC</td>
+
+Market Cap
+<td class="no-wrap market-cap text-right" data-usd="1.24074089266e+11" data-btc="16850612.0">$124,074,089,266</td>
+
+Price
+<a href="/currencies/bitcoin/#markets" class="price" data-usd="7363.18" data-btc="1.0">$7,363.18</a>
+
+Circulating Supply
+<a href="http://blockchain.info" target="_blank" data-supply="16850612.0" data-supply-container="">16,850,612</a>
+
+Volume 24hr
+<a href="/currencies/bitcoin/#markets" class="volume" data-usd="12866300000.0" data-btc="1735090.0">$12,866,300,000</a>
+
+%1hr
+<td class="no-wrap percent-1h  text-right negative_change" data-usd="-4.21" data-btc="0.00">-4.21%</td>
+
+%24hr
+<td class="no-wrap percent-24h   text-right positive_change" data-usd="14.52" data-btc="0.00">14.52%</td>
+
+%7D
+<td class="no-wrap percent-7d  text-right negative_change" data-usd="-27.21" data-btc="0.00">-27.21%</td>
+
+****************************************************** When you go to the coin page......
+
+
+This is Max Supply (its not on the main page, and not all of the coins have one.....)
+<span data-format-supply="" data-format-value="21000000">21,000,000</span>
+
+---------------------------------Then in the Markets tab -------- https://coinmarketcap.com/currencies/bitcoin/#markets
+Full Table XPath
+//*[@id="markets-table"]
+
+
+Source
+<a href="/exchanges/okex/">OKEx</a>
+
+Pair
+<a href="https://www.okex.com/spot/trade/index.do#btc_usdt" target="_blank">BTC/USDT</a>
+
+Volume
+<span class="volume" data-usd="1631100000.0" data-btc="223073.0" data-native="223066.0">$1,631,100,000</span>
+
+Price
+<span class="price" data-usd="7312.18" data-btc="1.00003" data-native="7312.91">$7,312.18</span>
+
+---------------------------------Then in the Historical tab---------https://coinmarketcap.com/currencies/bitcoin/historical-data/?start=20130428&end=20180207
+
+
+Full Historical Data Table Xpath
+//*[@id="historical-data"]/div/div[3]/table
+
+
+First Row of the Historical Table..........
+<tr class="text-right">
+                        <td class="text-left">Feb 06, 2018</td>
+                        <td data-format-fiat="" data-format-value="7051.75">7,051.75</td>
+                        <td data-format-fiat="" data-format-value="7850.7">7,850.70</td>
+                        <td data-format-fiat="" data-format-value="6048.26">6,048.26</td>
+                        <td data-format-fiat="" data-format-value="7754.0">7,754.00</td>
+                        <td data-format-market-cap="" data-format-value="13999800000.0">13,999,800,000</td>
+                        <td data-format-market-cap="" data-format-value="1.1881e+11">118,810,000,000</td>
+                        </tr>
+
+
+
+
+
+
+
+
+#scrapy shell "https://coinmarketcap.com/1"
+
+//*[@id="currencies_wrapper"]
+//*[@id="page_filling_chart"]
+
+/html/body/div[4]/div/div[1]/div[5]
+
+
+
+	def parse(self, response)
+		links = response.xpath('//a[@class="currency-name-container"]/@href').extract()
+		links = ["https://coinmarketcap.com/" + link for link in links]
+
+		for url in links:
+			yield Request(url, callback=self.parse_coin)
+
+	def parse_coin(self,response)
+		mkts = response.xpath('//div[@class="row bottom-margin-1x"]/div/ul/li/a/@href').extract()[-1]
+		links = ["https://coinmarketcap.com/" + mkts]
+		top_list = response.xpath('//h2/text()').extract_first()
