@@ -15,19 +15,19 @@ class CryptoSpider(Spider):
 	def parse(self, response):
 		rows = response.xpath('//*[@id="currencies"]//tr')
 		for row in rows:
-			Name = row.xpath('//td[2]/a/text()').extract_first()
+			Name = row.xpath('./td[2]/a/text()').extract_first()
 			#works
-			Symbol = row.xpath('//td[2]/span/a/text()').extract_first()
+			Symbol = row.xpath('./td[2]/span/a/text()').extract_first()
 			#works
-			MCap = row.xpath('//td[3]/@data-usd').extract_first()
+			MCap = row.xpath('./td[3]/@data-usd').extract_first()
 			#works
-			Price = row.xpath('//td[4]/a/@data-usd').extract_first()
+			Price = row.xpath('./td[4]/a/@data-usd').extract_first()
 			#works
-			Vol = row.xpath('//td[5]/a/@data-usd').extract_first()
+			Vol = row.xpath('./td[5]/a/@data-usd').extract_first()
 			#works
-			CSupply = row.xpath('//td[6]/a/@data-supply').extract_first()
+			CSupply = row.xpath('./td[6]/a/@data-supply').extract_first()
 			#works
-			DayChg = row.xpath('//td[7]/@data-percentusd').extract_first()
+			DayChg = row.xpath('./td[7]/@data-percentusd').extract_first()
 			#works
 
 			item = CryptoItem()
