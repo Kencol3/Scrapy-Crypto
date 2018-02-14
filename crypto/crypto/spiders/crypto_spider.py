@@ -40,4 +40,5 @@ class CryptoSpider(Spider):
 			item['DayChg'] = DayChg
 			yield item
 
+
 			
